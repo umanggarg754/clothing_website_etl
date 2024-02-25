@@ -19,7 +19,10 @@ class ZaraSKUExtracterTestCase(unittest.TestCase):
         sku_details = self.zara_sku_extracter.get_sku_details(self.sku_link)
         self.assertIsNotNone(sku_details)
 
-
+    def test_get_sku_images(self):
+        images = self.zara_sku_extracter.get_sku_images()
+        self.assertIsNotNone(images)
+        self.assertTrue(len(images) > 0)
 
 
 # pytest --capture=no --log-cli-level=DEBUG tests/

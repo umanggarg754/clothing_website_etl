@@ -10,8 +10,8 @@ class ZaraProfilerTestCase(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.link = "https://www.zara.com/in/"
-        self.zara_profiler = ZaraProfiler(self.link,'in')
+        self.link = "https://www.zara.com/us/"
+        self.zara_profiler = ZaraProfiler(self.link,'us')
 
     def test_get_profiling(self):
     

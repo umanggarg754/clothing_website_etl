@@ -25,13 +25,14 @@ class ZaraSKUExtracter(SKUExtracter):
     
 
     # Get all links on the page -- then go to each page and extract detail 
-    # TODO SCROLL AND GET ALL LINKS 
     def get_sku_links(self,link):
         driver = get_driver()
         load_page_and_click_cookies_zara(link,driver)
         sku_links = []
         try:
             driver.get(link)
+            # scroll till botton of page 
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             xpath = '//a[contains(@class,"product-link")]'
             WebDriverWait(driver, self.patience).until(EC.presence_of_element_located((By.XPATH, xpath)))
             products = driver.find_elements(By.XPATH, xpath)
@@ -47,8 +48,6 @@ class ZaraSKUExtracter(SKUExtracter):
             logging.error(f"Exception: {e}")
         driver.close()
         return sku_links
-
-
 
 
     # use scrapy to get details of page TODO --- for single pages where no interaction is requried 
@@ -121,7 +120,7 @@ class ZaraSKUExtracter(SKUExtracter):
     
     def get_sku_images(self,sku):
         try:
-            images = sku.find_elements(By.XPATH,'//ul[contains(@class,"product-detail-images-thumbnails")]/li')
+            images = sku.find_elements(By.XPATH,'//*[contains(@class,"product") and contains(@class,"image")]')
             product_images = []
             for image in images:
                 try:
@@ -133,7 +132,7 @@ class ZaraSKUExtracter(SKUExtracter):
                     logging.debug(f"Exception: {e}")
         except Exception as e:
             logging.error(f"Exception: {e}")
-        return product_images
+        return list(set(product_images))
 
     # since there is no interaction required -- will use scrapy here 
     def get_sku_details(self,link):
@@ -144,7 +143,9 @@ class ZaraSKUExtracter(SKUExtracter):
             driver.get(link)
             load_page_and_click_cookies_zara(link,driver)
             
-            sku_div = '//div[@class="product-detail-view__main"]'
+            #sku_div = '//div[@class="product-detail-view__main"]'
+            # xpath for class contains product detail and main 
+            sku_div = '//div[contains(@class,"product-detail") and contains(@class,"main")]'
             WebDriverWait(driver, self.patience).until(EC.presence_of_element_located((By.XPATH, sku_div)))
             sku = driver.find_element(By.XPATH, sku_div)
 

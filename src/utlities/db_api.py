@@ -167,7 +167,7 @@ class DB_API:
     #             return None 
             
     def find_company(self,url):
-        if url.endswith('en') or url.endswith('us'):
+        if url.endswith('en') or url.endswith('us') or url.endswith('es'):
             url = url.rsplit('/', 1)[0] + '/' # TODO fix this
         with self.Session() as session:
             company = session.query(CompnyProfile).filter(CompnyProfile.url.contains(url)).first()

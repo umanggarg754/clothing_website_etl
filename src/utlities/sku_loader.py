@@ -33,15 +33,19 @@ class SKULoader(ABC):
             logging.info("here as ")
             yield self.transform_data(data)
 
-
+    # single thread 
     # def load_data_db(self):
-    #     # Insert data using multiple threads
-    #     with ThreadPoolExecutor(max_workers=5) as executor:
-    #         executor.submit(self.db_api.load_bulk_sku_details, self.get_data())
-            
-    def load_data_db(self):
-        for data in self.get_data():
-            self.db_api.load_sku_details(data)
+    #     for data in self.get_data():
+    #         self.db_api.load_sku_details(data)
+
+    def load_data_db(self, num_threads=5):  # You can specify the number of threads as needed
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            futures = []
+            for data in self.get_data():
+                futures.append(executor.submit(self.db_api.load_sku_details, data))
+            # Wait for all futures to complete
+            for future in futures:
+                future.result()
 
 
     @abstractmethod
