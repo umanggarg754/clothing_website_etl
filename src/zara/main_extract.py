@@ -60,7 +60,7 @@ def extract_and_load(url:str,country:str):
         
         logging.info(f"Category links: {len(category_links)}")
         if os.getenv('DEBUG'):
-            category_links = category_links[:2]
+            category_links = category_links[:3]
             logging.info(f"Category links: {category_links}")
                 
    

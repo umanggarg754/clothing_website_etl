@@ -11,9 +11,20 @@ class SKULoaderZara(SKULoader):
     def __init__(self,s3_path):  
         super().__init__(s3_path)
 
-    def get_price_currency(self,text):
-        # example=  "$ 14.90\n-\n$ 25.90"
-        return None,None
+    @staticmethod
+    def get_price_currency(text):
+        matches = re.findall(r'\$?\s*(?:\u20B9|Rs\.|\$|€)?\s*(\d+[.,]\d+)\s*(?:USD|EUR|£|€|₹|Rs)?', text)
+        prices = [float(match.replace(',','.')) for match in matches]
+        if prices:
+            max_price = max(prices)
+        else:
+            max_price = None
+        currencies = re.findall(r'\$|€|£|₹|Rs\.?', text)
+        if currencies:
+            currency = max(set(currencies), key=currencies.count)
+        else:
+            currency = None
+        return max_price, currency
   
 
     def get_size(self,text):
@@ -50,7 +61,11 @@ class SKULoaderZara(SKULoader):
         
         # find company id from db using product url -- base url common 
         logging.info(data)
-        price,currency = self.get_price_currency(data['price'])
+        if 'price' in data:
+            price,currency = self.get_price_currency(data['price'])
+        else:
+            logging.warning(f"Price not found for {data['url']}")
+            price,currency = None,None
         
         size = self.get_size(data['size'])
         

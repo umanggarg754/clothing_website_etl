@@ -33,7 +33,7 @@ class SKUExtracter(ABC):
         logging.info(f"Total SKU links: {len(self.sku_links)}")
 
         if os.getenv('DEBUG'):
-            self.sku_links = self.sku_links[:5]
+            self.sku_links = self.sku_links[:10]
 
 
         logging.info(f"{self.sku_links}")

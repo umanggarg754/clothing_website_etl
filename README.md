@@ -19,6 +19,7 @@ b. get details for each sku)
 * [NOTE: currently b is done using selemium but it should be repalced by efficient methods like scrapy ]
 [Processes efficient in terms of multiprocessing]
 
+USE env variable DEBUG to get only 10 SKU details 
 
 -- Data extracted is stored to s3 on aws. 
 (set credtentials in config.py)
@@ -53,13 +54,17 @@ general functions for scraping : src/utlities/functions.py
 -- Some TODOs are tasks that are pending like some transformation functions 
 
 ## Improvements:
+-- convert more selectors to general selectors so that they can be moved to utilities
 -- for SKU detail scraping -- use scrapy 
 -- Containerization of scripts
+-- Improvements in logging -- some INFO statements can be debug and some ERRORS can be warning 
 
 
 ## Zara example overview:
 
 Tests added 
+PYTHONPATH=. pytest --capture=no --log-cli-level=DEBUG src/zara/tests/test_profiler.py
+PYTHONPATH=. pytest --capture=no --log-cli-level=DEBUG src/zara/tests/test_sku_extracter.py
 
 
 

@@ -17,7 +17,7 @@ class ZaraSKUExtracterTestCase(unittest.TestCase):
     def test_get_sku_details(self):
     
         sku_details = self.zara_sku_extracter.get_sku_details(self.sku_link)
-        self.assertTrue(sku_details)
+        self.assertIsNotNone(sku_details)
 
 
 
