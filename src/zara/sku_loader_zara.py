@@ -13,16 +13,28 @@ class SKULoaderZara(SKULoader):
 
     @staticmethod
     def get_price_currency(text):
+        logging.info(f"Text: {text}")
         matches = re.findall(r'\$?\s*(?:\u20B9|Rs\.|\$|€)?\s*(\d+[.,]\d+)\s*(?:USD|EUR|£|€|₹|Rs)?', text)
-        prices = [float(match.replace(',','.')) for match in matches]
-        if prices:
-            max_price = max(prices)
-        else:
+        try:
+            prices = [float(match.replace(',','')) for match in matches]
+            if prices:
+                max_price = max(prices)
+            else:
+                max_price = None
+        except Exception as e:
+            logging.error(f"Error in get_price_currency: {e}")
             max_price = None
-        currencies = re.findall(r'\$|€|£|₹|Rs\.?', text)
-        if currencies:
-            currency = max(set(currencies), key=currencies.count)
-        else:
+        
+        try:
+            currencies = re.findall(r'\$|€|£|₹|Rs\.?', text)
+            if currencies:
+                currency = max(set(currencies), key=currencies.count)
+            elif 'EUR' in text:
+                currency = 'EUR'
+            else:
+                currency = None
+        except Exception as e:
+            logging.error(f"Error in get_price_currency: {e}")
             currency = None
         return max_price, currency
   
@@ -43,7 +55,6 @@ class SKULoaderZara(SKULoader):
         # search urls in company_profile from db_api where url is substring of the input string 
         base_url = url.rsplit('/', 1)[0]
         company_id = self.db_api.find_company(base_url)
-        print(company_id)
         return company_id
 
     def transform_data(self,data):
@@ -61,13 +72,16 @@ class SKULoaderZara(SKULoader):
         
         # find company id from db using product url -- base url common 
         logging.info(data)
-        if 'price' in data:
+        if 'price' in data and data['price'] is not None:
             price,currency = self.get_price_currency(data['price'])
         else:
             logging.warning(f"Price not found for {data['url']}")
             price,currency = None,None
         
-        size = self.get_size(data['size'])
+        if 'size' in data and data['size'] is not None:
+            size = self.get_size(data['size'])
+        else:
+            size = None
         
         if 'care_composition' in data:
             care,composition = self.get_care_composition(data['care_composition']) # care_composition
@@ -81,18 +95,23 @@ class SKULoaderZara(SKULoader):
         else:
             color = None
 
-        transformed_data ={
-            'url': data['url'],
-            'name': data['name'],
-            'images': data['images'],
-            'colour': color,
-            'price': price,
-            'currency': currency,
-            'silhouette': data['silhouette'],
-            'size':size,
-            'care': care,
-            'composition': composition,
-            'company_id': company_id
-        }
+        if 'name' in data and data['name'] is not None and 'url' in data and data['url'] is not None and 'images' in data:
+            
+            transformed_data ={
+                'url': data['url'],
+                'name': data['name'],
+                'images': data['images'],
+                'colour': color,
+                'price': price,
+                'currency': currency,
+                'silhouette': data['silhouette'],
+                'size':size,
+                'care': care,
+                'composition': composition,
+                'company_id': company_id
+            }
        
+        else:
+            logging.warning(f"Data not found for {data['url']}")
+            transformed_data = None
         return transformed_data

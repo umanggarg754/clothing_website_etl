@@ -41,7 +41,7 @@ class SKULoader(ABC):
             
     def load_data_db(self):
         for data in self.get_data():
-            self.db_api.load_sku_details(self.transform_data(data))
+            self.db_api.load_sku_details(data)
 
 
     @abstractmethod

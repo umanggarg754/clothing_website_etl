@@ -65,6 +65,7 @@ general functions for scraping : src/utlities/functions.py
 Tests added 
 PYTHONPATH=. pytest --capture=no --log-cli-level=DEBUG src/zara/tests/test_profiler.py
 PYTHONPATH=. pytest --capture=no --log-cli-level=DEBUG src/zara/tests/test_sku_extracter.py
+PYTHONPATH=. python -m pytest --capture=no --log-cli-level=DEBUG src/zara/tests/test_sku_loader.py
 
 
 

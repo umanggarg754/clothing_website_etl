@@ -5,7 +5,6 @@
 from abc import ABC,abstractmethod
 import os 
 import logging 
-import boto3
 from src.utlities.s3 import S3Handler
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, DateTime, Text
@@ -112,6 +111,9 @@ class DB_API:
            
     
     def load_sku_details(self,data):
+        if data is None:
+            logging.warning("data is None")
+            return None
         # data is a dict with all the sku details key value pairs 
         # create a new sku details and insert into the table
         with self.Session() as session:
