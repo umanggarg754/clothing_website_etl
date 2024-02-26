@@ -38,12 +38,12 @@ b. get details for each sku
 
 #### Tables on database - company_profiles,sku_details,brands (check src/sql for DDLs)
 
-1. Transforming and loading company profile : src/utilities/profile_loader.py 
+### 1. Transforming and loading company profile : src/utilities/profile_loader.py 
 
 * Downloading data from s3 and transforming details wrt to database and then ingesting data using sqlAlchemy
 * ProfileLoader - an abstract class with some general functions and abstract functions
 
-2. Transforming and loading sku details : src/utilities/sku_loader.py 
+### 2. Transforming and loading sku details : src/utilities/sku_loader.py 
 
 * Downloading data from s3 and transforming details wrt to database and then ingesting data using sqlAlchemy
 * SKULoader - abtstract class with some general functions and abstract functions
@@ -60,18 +60,13 @@ b. get details for each sku
 
 ## TODOs:
 -- TODOs have been marked throughout the codes that are some minor enhancments and bugs that can be fixed 
-
 -- Some TODOs are tasks that are pending like some transformation functions 
-
 -- get_page_views --- left -- find free SEO API 
 
 ## Improvements:
 -- convert more selectors to general selectors so that they can be moved to utilities
-
 -- for SKU detail scraping -- use scrapy 
-
 -- Containerization of scripts 
-
 -- Improvements in logging -- some INFO statements can be debug statements and some ERRORS can be warnings 
 
 
