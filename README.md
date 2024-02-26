@@ -60,13 +60,18 @@ b. get details for each sku
 
 ## TODOs:
 -- TODOs have been marked throughout the codes that are some minor enhancments and bugs that can be fixed 
+
 -- Some TODOs are tasks that are pending like some transformation functions 
+
 -- get_page_views --- left -- find free SEO API 
 
 ## Improvements:
 -- convert more selectors to general selectors so that they can be moved to utilities
+
 -- for SKU detail scraping -- use scrapy 
+
 -- Containerization of scripts 
+
 -- Improvements in logging -- some INFO statements can be debug statements and some ERRORS can be warnings 
 
 
